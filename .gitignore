@@ -8,8 +8,6 @@ bower_components
 node_modules
 __pycache__/
 .venv/
-chroma/
-chroma_768/
 
 
 # Compiled source #
