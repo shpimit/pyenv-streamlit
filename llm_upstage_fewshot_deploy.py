@@ -2,6 +2,9 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, FewShotChatMessagePromptTemplate
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
+
+from langchain_community.document_loaders import Docx2txtLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 # from langchain.chains import RetrievalQA
 # from langchain import hub
 from langchain_upstage import ChatUpstage
@@ -59,8 +62,21 @@ def get_history_retriever():
 
 def get_retriever():
     embedding =  UpstageEmbeddings(model='embedding-query')
+    
+    # 데이터를 처음 저장할 때
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1500,
+        chunk_overlap=200,
+    )
+
+    loader = Docx2txtLoader('./tax_with_markdown.docx')
+    document_list = loader.load_and_split(text_splitter=text_splitter) 
+
+    database = Chroma.from_documents(documents=document_list, embedding=embedding, collection_name='chroma-tax', persist_directory="./chroma")
+    
+    
     # 이미 저장된 데이터를 사용할 때
-    database = Chroma(collection_name='chroma-tax',  persist_directory="./chroma", embedding_function=embedding)
+    # database = Chroma(collection_name='chroma-tax',  persist_directory="./chroma", embedding_function=embedding)
 
     retriever = database.as_retriever(search_kwargs={'k': 4})
 
