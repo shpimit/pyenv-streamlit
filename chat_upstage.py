@@ -2,7 +2,7 @@ import streamlit as st
 
 from dotenv import load_dotenv
 
-from llm_upstage_fewshot_deploy import get_ai_response
+from llm_upstage_fewshot import get_ai_response
 
 st.set_page_config(page_title="소득세 챗봇", page_icon="☎")
 
@@ -30,4 +30,4 @@ if user_question := st.chat_input(placeholder="소득세에 관련된 궁금한 
         with st.chat_message("ai"):
             # st.write(ai_message)
             ai_message = st.write_stream(ai_response)
-            st.session_state.message_list.append({"role": "ai", "content": ai_message})    
+        st.session_state.message_list.append({"role": "ai", "content": ai_message})    
