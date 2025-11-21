@@ -29,4 +29,4 @@ def lambda_handler(event, context):
     return {
         'statusCode': 200,
         'body': json.dumps("Email Sent Successfully. MessageId is: " + response['MessageId'])
-    }
+    } 
